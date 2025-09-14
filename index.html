@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนการจัดการขยะสำหรับกิจกรรม</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutrals with a Green Accent -->
+    <!-- Application Structure Plan: The SPA is designed as a single-page dashboard with clear, thematic sections (Overview, Team Responsibilities, Operational Plan) accessible via a sticky navigation bar. This structure was chosen over a linear report format to allow users (event staff, team leads) to quickly access information relevant to their specific roles. The core interaction is drill-down: users start with a high-level view and can click on interactive cards for each team to reveal detailed responsibilities and tasks. This task-oriented approach makes the complex logistical plan more digestible and actionable. -->
+    <!-- Visualization & Content Choices: Report Info: Team structures & responsibilities. -> Goal: Organize & Inform. -> Viz/Method: Interactive accordion/card layout built with HTML/Tailwind/JS. -> Interaction: onClick to expand/collapse details for each team. -> Justification: Prevents information overload by presenting a clean overview first, allowing users to explore details on demand. | Report Info: Specific operational tasks (bin upgrades, walker routes). -> Goal: Inform. -> Viz/Method: Styled checklist using HTML/CSS. -> Interaction: None, focus on readability. -> Justification: A simple list is the most effective way to communicate a sequence of actions. No data visualizations like charts were used as the source material is qualitative and organizational, making charts inappropriate. Library/Method: Vanilla JS for all interactions. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f9f9f7;
+            color: #3d405b;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link.active {
+            color: #3d405b;
+            border-bottom-color: #81b29a;
+            font-weight: 700;
+        }
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .details-content.open {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#3d405b]">แผนการจัดการขยะ</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link text-gray-500 hover:text-[#3d405b] border-b-2 border-transparent pb-1">ภาพรวม</a>
+                <a href="#teams" class="nav-link text-gray-500 hover:text-[#3d405b] border-b-2 border-transparent pb-1">ทีมและหน้าที่</a>
+                <a href="#operations" class="nav-link text-gray-500 hover:text-[#3d405b] border-b-2 border-transparent pb-1">แผนปฏิบัติการ</a>
+            </div>
+            <div class="md:hidden">
+                 <select id="mobile-nav" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#81b29a] focus:border-[#81b29a] block w-full p-2.5">
+                    <option value="#overview">ภาพรวม</option>
+                    <option value="#teams">ทีมและหน้าที่</option>
+                    <option value="#operations">แผนปฏิบัติการ</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+        
+        <section id="overview" class="scroll-mt-24 text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4 text-[#3d405b]">ภาพรวมการจัดการขยะ</h2>
+            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
+                นี่คือแดชบอร์ดสรุปแนวทางการจัดการขยะสำหรับกิจกรรม โดยอ้างอิงความสำเร็จจากงาน Open House ที่ผ่านมา เป้าหมายหลักคือการประสานงานและขอความร่วมมือจากทุกส่วนงานในการ **"แยกขยะตั้งแต่ต้นทาง"** เพื่อสร้างกิจกรรมที่สะอาดและเป็นมิตรต่อสิ่งแวดล้อม
+            </p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                    <div class="text-5xl mb-3">🏢</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#e07a5f]">ขยะอาคาร</h3>
+                    <p class="text-gray-500">กำกับดูแลการคัดแยกภายในอาคารหลัก 3 แห่ง</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                    <div class="text-5xl mb-3">🎉</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#3d405b]">ขยะกิจกรรมพิเศษ</h3>
+                    <p class="text-gray-500">จัดการพื้นที่หนาแน่นสูง เช่น โซนออกร้านและเวที</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                    <div class="text-5xl mb-3">🗑️</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#81b29a]">ขยะ 17 จุด</h3>
+                    <p class="text-gray-500">บริหารจัดการจุดทิ้งขยะหลักทั่วพื้นที่จัดงาน</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="teams" class="scroll-mt-24 mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#3d405b]">ทีมและหน้าที่รับผิดชอบ</h2>
+            <p class="max-w-3xl mx-auto text-gray-600 mb-10 text-center">
+                แผนนี้แบ่งความรับผิดชอบออกเป็น 3 ทีมหลักเพื่อให้การดำเนินงานชัดเจนและมีประสิทธิภาพสูงสุด คลิกที่แต่ละทีมเพื่อดูรายละเอียดหน้าที่และความรับผิดชอบ
+            </p>
+            <div class="space-y-6 max-w-4xl mx-auto">
+                
+                <div class="card bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                    <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-3xl">🏢</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-[#e07a5f]">1. การจัดการขยะอาคาร</h3>
+                                <p class="text-gray-500">ผู้ดูแล: คุณแมก, คุณโดซ, คุณอ้น</p>
+                            </div>
+                        </div>
+                        <span class="transform transition-transform duration-300 text-2xl text-gray-400">▼</span>
+                    </button>
+                    <div class="details-content">
+                        <div class="p-6 pt-0 text-gray-700">
+                            <p class="font-semibold mb-3">ภาพรวม: ผู้ดูแลอาคารแต่ละท่านจะรับผิดชอบกำกับดูแลการคัดแยกขยะภายในอาคารของตนเอง</p>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><span class="font-bold">อาคารศูนย์การเรียนรู้มหิดล (MLC):</span> คุณแมก</li>
+                                <li><span class="font-bold">อาคารสิริวิทยา:</span> คุณโดซ</li>
+                                <li><span class="font-bold">อาคารสิทธาคาร:</span> คุณอ้น</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                    <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-3xl">🎉</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-[#3d405b]">2. การจัดการขยะกิจกรรมพิเศษ</h3>
+                                <p class="text-gray-500">ประสานงานโดยทีมพี่เลี้ยงคัดแยกขยะ</p>
+                            </div>
+                        </div>
+                        <span class="transform transition-transform duration-300 text-2xl text-gray-400">▼</span>
+                    </button>
+                    <div class="details-content">
+                        <div class="p-6 pt-0 grid md:grid-cols-2 gap-6 text-gray-700">
+                           <div>
+                                <h4 class="font-bold mb-2">พื้นที่เป้าหมายและทีมงาน</h4>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li><span class="font-semibold">พื้นที่:</span> โซนออกร้านสิทธิประโยชน์</li>
+                                    <li><span class="font-semibold">จุดแยกขยะ:</span> (ต้องกำหนดจำนวนจุด)</li>
+                                    <li><span class="font-semibold">นักศึกษาช่วยงาน:</span> (ต้องกำหนดจำนวนคน)</li>
+                                    <li><span class="font-semibold text-green-700">ต้องการพี่เลี้ยง: 2 คน</span> (หน้าที่: ประสานงานและดูแลน้องๆ)</li>
+                                </ul>
+                           </div>
+                           <div>
+                                <h4 class="font-bold mb-2">การกำกับดูแลและการสนับสนุน</h4>
+                                <ul class="list-disc list-inside space-y-2">
+                                     <li><span class="font-semibold">พื้นที่กิจกรรม:</span> ทีมพี่เลี้ยงดูแล</li>
+                                     <li><span class="font-semibold">ภายในอาคาร:</span> ผู้ดูแลอาคารกำกับ</li>
+                                     <li class="font-semibold text-green-700">ต้องการทีมส่งข้าว, น้ำ, น้ำหวาน</li>
+                                </ul>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+                    <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                        <div class="flex items-center space-x-4">
+                           <div class="text-3xl">🗑️</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-[#81b29a]">3. การจัดการขยะ 17 จุด</h3>
+                                <p class="text-gray-500">ผู้ดูแล: พี่หมอ</p>
+                            </div>
+                        </div>
+                        <span class="transform transition-transform duration-300 text-2xl text-gray-400">▼</span>
+                    </button>
+                    <div class="details-content">
+                         <div class="p-6 pt-0 text-gray-700">
+                            <p class="font-semibold mb-3">ภาพรวม: บริหารจัดการจุดทิ้งขยะหลัก 17 จุดทั่วพื้นที่จัดงานให้มีประสิทธิภาพสูงสุด</p>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><span class="font-bold">ยกระดับอุปกรณ์:</span> เพิ่ม "ถังขยะแบบคู่ (Double Bins)" ทุกจุด</li>
+                                <li><span class="font-bold">ทีมจัดเก็บ:</span> จัดให้มี "Walker" เดินเก็บและเคลียร์พื้นที่</li>
+                                <li><span class="font-bold">กำหนดเวลารับขยะ:</span> สร้างตารางนัดรับขยะเศษอาหาร, น้ำ/น้ำแข็ง</li>
+                                <li><span class="font-bold">บริหารจัดการคน:</span> จัดทำแผนการจัดการบุคลากร</li>
+                                <li><span class="font-bold">การสื่อสาร:</span> สร้างกลุ่ม Line สำหรับนักศึกษาช่วยงานเพื่อสนับสนุน</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="operations" class="scroll-mt-24">
+             <h2 class="text-3xl font-bold text-center mb-8 text-[#3d405b]">สรุปแผนปฏิบัติการ (Action Plan)</h2>
+             <p class="max-w-3xl mx-auto text-gray-600 mb-10 text-center">
+                นี่คือรายการสิ่งที่ต้องดำเนินการ (To-Do) เพื่อให้แผนการจัดการขยะสำเร็จลุล่วง แต่ละข้อคือส่วนประกอบสำคัญที่ต้องการการดำเนินการและการประสานงานร่วมกัน
+            </p>
+            <div class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-md border border-gray-200">
+                <div class="grid md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-2xl mt-1">✓</span>
+                        <div>
+                            <h4 class="font-bold">เพิ่มถังขยะ Double Bins</h4>
+                            <p class="text-gray-600 text-sm">ติดตั้งถังขยะแบบคู่ใน 17 จุดหลักให้ครบถ้วน</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-2xl mt-1">✓</span>
+                        <div>
+                            <h4 class="font-bold">จัดทีม Walker</h4>
+                            <p class="text-gray-600 text-sm">จัดหาและวางแผนเส้นทางสำหรับทีมเดินเก็บขยะ</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start space-x-3">
+                        <span class="text-yellow-500 text-2xl mt-1">!</span>
+                        <div>
+                            <h4 class="font-bold">กำหนดจำนวนทีมงาน</h4>
+                            <p class="text-gray-600 text-sm">ระบุจำนวน นศ. ช่วยงาน และโซนกิจกรรมพิเศษ</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-2xl mt-1">✓</span>
+                        <div>
+                            <h4 class="font-bold">จัดหาทีมพี่เลี้ยง 2 คน</h4>
+                            <p class="text-gray-600 text-sm">คัดเลือกผู้ประสานงานสำหรับดูแลโซนกิจกรรมพิเศษ</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-2xl mt-1">✓</span>
+                        <div>
+                            <h4 class="font-bold">สร้างกลุ่ม Line</h4>
+                            <p class="text-gray-600 text-sm">ตั้งกลุ่มสื่อสารสำหรับ นศ. และทีมงานหลัก</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-yellow-500 text-2xl mt-1">!</span>
+                        <div>
+                            <h4 class="font-bold">ทำแผนจัดการคน</h4>
+                            <p class="text-gray-600 text-sm">มอบหมายหน้าที่และความรับผิดชอบของแต่ละทีม</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-2xl mt-1">✓</span>
+                        <div>
+                            <h4 class="font-bold">ประสานงานทีมส่งอาหาร</h4>
+                            <p class="text-gray-600 text-sm">จัดหาทีมสนับสนุนด้านอาหารและเครื่องดื่ม</p>
+                        </div>
+                    </div>
+                     <div class="flex items-start space-x-3">
+                        <span class="text-yellow-500 text-2xl mt-1">!</span>
+                        <div>
+                            <h4 class="font-bold">ทำตารางรับขยะพิเศษ</h4>
+                            <p class="text-gray-600 text-sm">กำหนดเวลารับขยะเศษอาหารและน้ำแข็ง</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="text-center py-6 mt-12 bg-gray-100 border-t">
+        <p class="text-gray-500 text-sm">Waste Management Plan Dashboard</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accordions = document.querySelectorAll('.accordion-toggle');
+            accordions.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('span');
+                    
+                    if (content.classList.contains('open')) {
+                        content.classList.remove('open');
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        content.classList.add('open');
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            const mobileNav = document.getElementById('mobile-nav');
+
+            function changeActiveLink() {
+                let index = sections.length;
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                if (index > -1) {
+                    const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
+            }
+
+            changeActiveLink();
+            window.addEventListener('scroll', changeActiveLink);
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelector(link.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            mobileNav.addEventListener('change', (e) => {
+                const targetId = e.target.value;
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
